@@ -1221,7 +1221,7 @@ o{opacity:1;transform:translateY(0)}}
   .prc-name{display:inline-flex;align-items:center;gap:4px;}
   .prc-times{display:flex;gap:6px;}
   .prep-time-badge{font-size:10px;opacity:0.55;font-weight:400;display:inline-flex;align-items:center;gap:2px;}
-  .prep-note-inline{display:none;flex:1;min-width:0;border:none;border-bottom:1px solid var(--border);background:transparent;font-family:'Jost',sans-serif;font-size:13px;color:var(--text);padding:2px 4px;margin:0 6px;outline:none;}
+  .prep-note-inline{display:none;flex:1;min-width:60px;border:none;border-bottom:1.5px solid var(--border);background:transparent;font-family:'Jost',sans-serif;font-size:13px;color:var(--text);padding:2px 4px;margin:0 4px;outline:none;align-self:center;}
   .prep-note-inline:focus{border-bottom-color:var(--green);}
   .prep-time-badge.cook{}
 </style>
@@ -7684,8 +7684,8 @@ function togglePrepNote(i) {
   const inp = document.getElementById('prep-note-wrap-'+i);
   if (!inp) return;
   const isHidden = inp.style.display === 'none' || inp.style.display === '';
-  inp.style.display = isHidden ? 'block' : 'none';
-  if (isHidden) { inp.focus(); inp.select(); }
+  inp.style.display = isHidden ? 'flex' : 'none';
+  if (isHidden) { inp.focus(); }
 }
 
 // ── Plan sub-views ──
@@ -8801,7 +8801,7 @@ setTimeout(initSeasonalBanner, 400);
 
   function buildPrepOptimizer(prepItems){try{if(!prepItems||prepItems.length<3)return '';var activeTotal=0,ovenGroups={},startFirst=[];prepItems.forEach(function(item){if(!item||item.checked||!item.recipeId)return;var r=null;for(var j=0;j<RECIPES.length;j++){if(RECIPES[j]&&RECIPES[j].id===item.recipeId){r=RECIPES[j];break;}}if(!r)return;activeTotal+=parseActiveMins(r.prep||'');if(isLongPassive(r.prep||'',r.cook||''))startFirst.push(r.title||'');var hasOven=/preheat|bake|roast/i.test((r.steps||[]).map(function(s){return s.text||'';}).join(' '));if(hasOven){var temp=getOvenTemp(r.steps||[]);if(temp&&temp>=200&&temp<=500){if(!ovenGroups[temp])ovenGroups[temp]=[];var cm=parseActiveMins((r.cook||'').split('/')[0]);ovenGroups[temp].push((r.title||'')+(cm?' ('+cm+' min)':''));}}});if(activeTotal===0&&!Object.keys(ovenGroups).length&&!startFirst.length)return '';var parts=[];if(activeTotal>0){var h=Math.floor(activeTotal/60),m=activeTotal%60,ts=h>0?h+' hr'+(m?' '+m+' min':''):m+' min';parts.push('<div class="opt-row"><span class="opt-icon">⏱</span><span class="opt-text"><strong>'+ts+' hands-on</strong> across all active tasks</span></div>');}if(startFirst.length)parts.push('<div class="opt-row"><span class="opt-icon">⏳</span><span class="opt-text"><strong>Start first:</strong> '+startFirst.join(', ')+'</span></div>');var sortedTemps=Object.keys(ovenGroups).map(Number).sort(function(a,b){return a-b;});if(sortedTemps.length){var ovenLines=sortedTemps.map(function(t){return '<div class="opt-oven-row"><span class="opt-temp">'+t+'°</span><span class="opt-oven-items">'+ovenGroups[t].join(' · ')+'</span></div>';}).join('');parts.push('<div class="opt-row opt-oven-wrap"><span class="opt-icon">🔥</span><div class="opt-oven-body"><strong>Batch your oven:</strong>'+ovenLines+'</div></div>');}return '<div class="prep-optimizer">'+parts.join('')+'</div>';}catch(e){return '';}}
   function buildPrepByCategory(prepItems){if(!prepItems||!Array.isArray(prepItems)||!prepItems.length)return '';var groups={};for(var i=0;i<prepItems.length;i++){var item=prepItems[i];if(!item||typeof item!=='object')continue;var r=null;if(item.recipeId&&typeof item.recipeId==='string'){for(var j=0;j<RECIPES.length;j++){if(RECIPES[j]&&RECIPES[j].id===item.recipeId){r=RECIPES[j];break;}}}var ci=6;try{ci=getPrepCategory(r);}catch(e){}if(typeof ci!=='number'||ci<0||ci>6)ci=6;if(!groups[ci])groups[ci]=[];groups[ci].push({item:item,idx:i});}var out='';var cats=Object.keys(groups).map(Number).sort(function(a,b){return a-b;});for(var k=0;k<cats.length;k++){var catI=cats[k];var info=(PREP_CAT_LABELS&&PREP_CAT_LABELS[catI])||{emoji:'🤝',label:'Other'};var ents=groups[catI]||[];var ihtml='';for(var e=0;e<ents.length;e++){try{var en=ents[e];if(!en)continue;var it=en.item;var ix=typeof en.idx==='number'?en.idx:e;if(!it||typeof it!=='object')continue;var nm=typeof it.name==='string'?it.name:'';var ck=it.checked===true;var rid=typeof it.recipeId==='string'?it.recipeId:'';var rTimes='';if(r){var rp=(r.prep||'').split('+')[0].trim();var rc=(r.cook||'').split('/')[0].trim();if(rc==='—'||rc.toLowerCase()==='none'||rc==='')rc='';if(rp)rTimes+='<span class="prep-time-badge">⏱ '+rp+'</span>';if(rc)rTimes+='<span class="prep-time-badge cook">🔥 '+rc+'</span>';}
-          var timesHtml=rTimes?'<span class="prc-times">'+rTimes+'</span>':'';var nh=rid?('<button class="prep-recipe-chip '+(ck?'checked':'')+'" data-rid="'+rid+'" onclick="openRecipeFromPlan(this.dataset.rid)"><span class="prc-name">'+nm+' <span class="wv-arrow">↗</span></span>'+timesHtml+'</button>'):('<span class="prep-item-name '+(ck?'checked':'')+'">'+nm+'</span>');var nv='';try{nv=typeof it.note==='string'?it.note.replace(/"/g,'&quot;'):''; }catch(ne){}var hn=typeof it.note==='string'&&it.note.trim().length>0;var nid='prep-note-wrap-'+ix;ihtml+='<div class="prep-item-wrap"><div class="prep-item"><div class="prep-check '+(ck?'checked':'')+'" onclick="togglePrep('+ix+')">'+(ck?'✓':'')+'</div><div class="prep-item-main">'+nh+(hn?'<div class="prep-item-note-preview" onclick="togglePrepNote('+ix+')">'+(it.note||'')+'</div>':'')+'</div><button class="prep-note-toggle" onclick="togglePrepNote('+ix+')" title="Add note">📝</button><button class="prep-item-remove" onclick="removePrep('+ix+')">✕</button></div><div class="prep-item-note-row" id="'+nid+'" style="display:'+(hn?'block':'none')+'"><input class="prep-item-note-input" placeholder="Add a note…" value="'+nv+'" oninput="savePrepNote('+ix+', this.value)"></div></div>';}catch(itemErr){}}out+='<div class="prep-cat-group"><div class="prep-cat-label">'+info.emoji+' '+info.label+'</div>'+ihtml+'</div>';}return out;}
+          var timesHtml=rTimes?'<span class="prc-times">'+rTimes+'</span>':'';var nh=rid?('<button class="prep-recipe-chip '+(ck?'checked':'')+'" data-rid="'+rid+'" onclick="openRecipeFromPlan(this.dataset.rid)"><span class="prc-name">'+nm+' <span class="wv-arrow">↗</span></span>'+timesHtml+'</button>'):('<span class="prep-item-name '+(ck?'checked':'')+'">'+nm+'</span>');var nv='';try{nv=typeof it.note==='string'?it.note.replace(/"/g,'&quot;'):''; }catch(ne){}var hn=typeof it.note==='string'&&it.note.trim().length>0;var nid='prep-note-wrap-'+ix;ihtml+='<div class="prep-item-wrap"><div class="prep-item"><div class="prep-check '+(ck?'checked':'')+'" onclick="togglePrep('+ix+')">'+(ck?'✓':'')+'</div><div class="prep-item-main">'+nh+(hn?'<div class="prep-item-note-preview">'+(it.note||'')+'</div>':'')+'</div><input class="prep-note-inline" id="'+nid+'" placeholder="Add a note…" value="'+nv+'" oninput="savePrepNote('+ix+', this.value)" style="display:'+(hn?'flex':'none')+'"><button class="prep-note-toggle" onclick="togglePrepNote('+ix+')" title="Add note">📝</button><button class="prep-item-remove" onclick="removePrep('+ix+')">&#x2715;</button></div></div>';}catch(itemErr){}}out+='<div class="prep-cat-group"><div class="prep-cat-label">'+info.emoji+' '+info.label+'</div>'+ihtml+'</div>';}return out;}
   function onPickerSearchFocus(){if(window.visualViewport)window.visualViewport.addEventListener('resize',adjustPickerForKeyboard);setTimeout(function(){var r=document.getElementById('picker-results');if(r)r.scrollTop=0;},300);}
   function onPickerSearchBlur(){if(window.visualViewport)window.visualViewport.removeEventListener('resize',adjustPickerForKeyboard);var p=document.getElementById('picker-panel');if(p)p.style.maxHeight='';}
   function adjustPickerForKeyboard(){var p=document.getElementById('picker-panel');if(!p)return;var kb=window.innerHeight-window.visualViewport.height;if(kb>100)p.style.maxHeight=(window.visualViewport.height*0.72)+'px';else p.style.maxHeight='';}
@@ -8809,6 +8809,15 @@ setTimeout(initSeasonalBanner, 400);
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
       navigator.serviceWorker.register('./sw.js').catch(function(){});
+    });
+  }
+
+  // ── Auto-reload when SW detects new version ──────────────────────────────
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', function(event) {
+      if (event.data && event.data.type === 'NEW_VERSION') {
+        window.location.reload();
+      }
     });
   }
 </script>
