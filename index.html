@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Soil to Soul">
+<title>From Soil to Soul</title>
+<meta name="twitter:image" content="https://tayrourke.github.io/from-soil-to-soul/logo.png">
+<meta name="twitter:description" content="Recipe library, meal planner, shopping list, and learning hub — designed for real life.">
+<meta name="twitter:title" content="From Soil to Soul">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="https://tayrourke.github.io/from-soil-to-soul/logo.png">
+<meta property="og:type" content="website">
+<meta property="og:description" content="Recipe library, meal planner, shopping list, and learning hub — designed for real life.">
+<meta property="og:title" content="From Soil to Soul">
+<link rel="canonical" href="https://tayrourke.github.io/from-soil-to-soul/">
+<meta name="description" content="A beautiful, offline-friendly recipe library, meal planner, and shopping list from From Soil to Soul.">
+<meta name="theme-color" content="#ebe6df">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+</head>
+<body>
+<main id="main">
+  <h1 class="sr-only">From Soil to Soul</h1>
+  <div id="app">
+  <!-- ══ TAB CONTENT ══ -->
+  <div id="tab-content">
+
+    <!-- ── HOME ── -->
+    <div class="tab-pane active" id="pane-home">
+      <a href="https://tayrourke.github.io/from-soil-to-soul/?v=apr2026" target="_blank" rel="noopener noreferrer"
+         id="update-banner"
+         style="display:none;align-items:center;justify-content:center;gap:6px;width:calc(100% + 56px);margin-top:-16px;margin-left:-28px;margin-right:-28px;margin-bottom:14px;padding:9px 16px;background:var(--text);color:white;text-decoration:none;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:1.4px;text-transform:uppercase;font-weight:500;flex-shrink:0">
+        <span>✨</span>
+        <span>May 2026 — tap on the 1st for new recipes</span>
+        <span>✨</span>
+      </a>
+      <div class="home-top">
+        <img class="home-logo" src="./logo.png" alt="From Soil to Soul">
+        <nav class="home-nav">
+          <button class="home-card c1" data-action="switchTab" data-tab="recipes">
+            <span class="home-card-icon">🍽️</span>
+            <span>
+              <span class="home-card-label">Recipes</span>
+              <span class="home-card-sub">Simple whole food recipes for every day</span>
+            </span>
+          </button>
+          <button class="home-card c2" data-action="switchTab" data-tab="plan">
+            <span class="home-card-icon">📅</span>
+            <span>
+              <span class="home-card-label">Meal Planner</span>
+              <span class="home-card-sub">Weekly plan + shopping list</span>
+            </span>
+          </button>
+          <button class="home-card c3" data-action="switchTab" data-tab="learn">
+            <span class="home-card-icon">🌱</span>
+            <span>
+              <span class="home-card-label">Learn</span>
+              <span class="home-card-sub">Ingredients, farming & philosophy</span>
+            </span>
+          </button>
+        </nav>
+      </div>
+
+      <div id="dinner-tonight-card">
+        <div class="dt-title">Dinner Tonight</div>
+        <div class="dt-row">
+          <button class="dt-btn" data-action="dtUseWhatIHave">🥕 Use What I Have</button>
+          <button class="dt-btn" data-action="dtTonightsDinner">🍽️ What's for Dinner?</button>
+        </div>
+        <input type="text" id="dt-use-input" placeholder="e.g. chicken, lemon, rice…" />
+        <div id="dt-result"></div>
+      </div>
+
+      <div class="home-copyright">© 2026 Swaps Made Simple LLC</div>
+    </div>
+
+    <!-- ── RECIPES ── -->
+    <div class="tab-pane" id="pane-recipes">
+      <!-- List view -->
+      <div id="recipes-list-view">
+        <div class="pane-header">
+          <span class="pane-header-title">The Recipes</span>
+          <button data-action="openAddMyRecipe" style="background:none;border:none;cursor:pointer;font-size:20px;padding:4px 8px;touch-action:manipulation;-webkit-tap-highlight-color:transparent" title="Add my recipe">➕</button>
+          <button id="recipe-dice-btn" data-action="openRandomRecipe" style="background:none;border:none;cursor:pointer;font-size:20px;padding:4px 8px;touch-action:manipulation;-webkit-tap-highlight-color:transparent" title="Random recipe">🎲</button>
+        </div>
+        <div class="sticky-recipe-header">
+          <div class="search-bar-wrap">
+            <div class="search-input-wrap">
+              <span class="search-icon">⌕</span>
+              <input type="text" id="recipe-search" placeholder="Search recipes…">
+            </div>
+          </div>
+          <div class="cat-filters" id="cat-filters"></div>
+        </div>
+        <div class="recipes-list" id="recipes-list"></div>
+      </div>
+      <!-- Detail view -->
+      <div id="recipe-detail-view" style="display:none;">
+        <div class="pane-header">
+          <button class="back-btn" data-action="closeRecipeDetail">←</button>
+          <span class="pane-header-title" id="detail-header-title"></span>
+        </div>
+        <div id="recipe-detail-body"></div>
+      </div>
+    </div>
+
+    <!-- ── PLAN ── -->
+    <div class="tab-pane" id="pane-plan">
+      <!-- Plan sub-views: planner, shopping -->
+      <div id="plan-main-view">
+        <div class="pane-header">
+          <span class="pane-header-title">Meal Planner</span>
+          <div style="display:flex;gap:6px;align-items:center">
+            <div style="display:flex;border:1px solid var(--border);border-radius:7px;overflow:hidden">
+              <button id="plan-day-btn" data-action="setPlanView" data-view="day" style="padding:5px 12px;border:none;font-size:11px;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;font-family:inherit;background:var(--text);color:white;font-weight:500">Day</button>
+              <button id="plan-week-btn" data-action="setPlanView" data-view="week" style="padding:5px 12px;border:none;font-size:11px;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;font-family:inherit;background:white;color:var(--text-light)">Week</button>
+            </div>
+            <button id="plan-add-btn" class="header-action" data-action="openPlanPicker" style="font-size:18px;line-height:1" title="Pre-loaded plans">📋</button>
+            <button class="header-action" data-action="switchPlanView" data-target="shop" style="font-size:18px;line-height:1">🛒</button>
+            <button class="header-action" data-action="exportMealPlan" style="font-size:18px;line-height:1;touch-action:manipulation;-webkit-tap-highlight-color:transparent">📤</button>
+          </div>
+        </div>
+        <div class="plan-week-header">
+          <div class="week-nav">
+            <button class="week-nav-btn" data-action="changeWeek" data-delta="-1">‹</button>
+            <span class="week-label" id="week-label"></span>
+            <button class="week-nav-btn" data-action="changeWeek" data-delta="1">›</button>
+          </div>
+        </div>
+        <div class="day-strip" id="day-strip"></div>
+        <div id="plan-day-container"><div class="plan-day-view" id="plan-day-view"></div></div>
+        <div id="plan-week-container" style="display:none"><div id="plan-week-view" style="padding:12px 12px 100px"></div></div>
+      </div>
+      <!-- Shopping list sub-view -->
+      <div id="plan-shop-view" style="display:none;">
+        <div class="pane-header">
+          <button class="back-btn" data-action="switchPlanView" data-target="main">←</button>
+          <span class="pane-header-title">Shopping List</span>
+          <button class="header-action" data-action="clearCheckedShop">Clear checked</button>
+        </div>
+        <div class="shop-add-row">
+          <input type="text" class="shop-add-input" id="shop-add-input" placeholder="Add an item…">
+          <button class="shop-add-go" data-action="addShopItem">Add</button>
+        </div>
+        <div class="shop-list" id="shop-list"></div>
+      </div>
+    </div>
+
+    <!-- ── LEARN ── -->
+    <div class="tab-pane" id="pane-learn">
+      <div id="learn-list-view">
+        <div class="pane-header">
+          <span class="pane-header-title">The Learning Kitchen</span>
+        </div>
+        
+        <div class="chapter-list" id="chapter-list" data-learn-anchor="1"></div>
+      <div class="learn-bottom">
+        <div class="data-section">
+          <div class="data-section-title">Backup &amp; Restore</div>
+          <div class="data-section-sub">Everything is stored locally on your device. Use a backup before switching phones.</div>
+          <div class="data-section-actions">
+            <button data-action="backupData" class="data-section-btn">⬇ Back up my data</button>
+            <button data-action="openRestorePicker" class="data-section-btn">⬆ Restore my data</button>
+          </div>
+          <input type="file" id="restore-input" accept=".json" style="display:none">
+        </div>
+        <button data-action="openChapter" data-chapter="legal" style="background:none;border:none;font-family:'Jost',sans-serif;font-size:10px;color:var(--text-light);opacity:0.5;letter-spacing:1px;text-transform:uppercase;cursor:pointer;padding:8px 16px">
+          © 2026 Swaps Made Simple LLC · Legal · Privacy · Contact
+        </button>
+      </div>
+      </div>
+      <div id="learn-detail-view" style="display:none;">
+        <div class="pane-header">
+          <button class="back-btn" data-action="closeChapterDetail">←</button>
+          <span class="pane-header-title" id="ch-detail-title"></span>
+        </div>
+        <div id="ch-detail-body"></div>
+      </div>
+    </div>
+
+  </div><!-- /tab-content -->
+
+  <!-- ══ BOTTOM TAB BAR ══ -->
+  <div id="tab-bar">
+    <button class="tab-btn active" id="tab-home" data-action="switchTab" data-tab="home">
+      <span class="tab-icon">🌿</span>
+      <span class="tab-label">Home</span>
+    </button>
+    <button class="tab-btn" id="tab-recipes" data-action="switchTab" data-tab="recipes">
+      <span class="tab-icon">🍽️</span>
+      <span class="tab-label">Recipes</span>
+    </button>
+    <button class="tab-btn" id="tab-plan" data-action="switchTab" data-tab="plan">
+      <span class="tab-icon">📅</span>
+      <span class="tab-label">Plan</span>
+    </button>
+    <button class="tab-btn" id="tab-learn" data-action="switchTab" data-tab="learn">
+      <span class="tab-icon">🌱</span>
+      <span class="tab-label">Learn</span>
+    </button>
+
+  </div>
+</div>
+
+<!-- ══ RECIPE PICKER SHEET ══ -->
+<div id="picker-sheet">
+  <div id="picker-backdrop" data-action="closePicker"></div>
+  <div id="picker-panel">
+    <div id="picker-handle"></div>
+    <div id="picker-title">Add to Plan</div>
+    <div id="picker-search-wrap">
+      <input type="text" id="picker-search" placeholder="Search recipes…">
+    </div>
+    <div id="picker-results"></div>
+  </div>
+</div>
+
+<!-- ══ TIMER TOAST ══ -->
+<div id="timer-toast" style="display:none">
+  <span>⏱</span>
+  <span id="timer-display">0:00</span>
+  <button id="timer-clock-btn" class="timer-clock-btn" data-action="openPhoneClock" title="Open Clock app">🕐</button>
+  <button class="timer-cancel" data-action="cancelTimer">Done</button>
+</div>
+
+
+<div id="my-recipe-modal" style="display:none;position:fixed;left:0;right:0;bottom:0;top:0;z-index:200;background:var(--offwhite)">
+  <div id="mr-header" style="position:fixed;left:0;right:0;top:0;z-index:201;background:var(--offwhite);padding-top:env(safe-area-inset-top,0px);border-bottom:1px solid var(--border)">
+    <div class="pane-header" style="margin:0">
+      <button class="back-btn" data-action="closeAddMyRecipe" style="touch-action:manipulation;-webkit-tap-highlight-color:transparent">←</button>
+      <span class="pane-header-title">Add My Recipe</span>
+    </div>
+  </div>
+  <div id="mr-scroll" style="overflow-y:auto;-webkit-overflow-scrolling:touch;height:100%;padding-top:calc(env(safe-area-inset-top,0px) + 56px)">
+    <div style="padding:16px 16px 60px;display:flex;flex-direction:column;gap:16px">
+      <div>
+        <label style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);font-weight:500;display:block;margin-bottom:6px">Recipe Name *</label>
+        <input id="mr-title" type="text" placeholder="e.g. Grandma's Chicken Soup" style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:16px;background:white;box-sizing:border-box;color:var(--text)">
+      </div>
+      <div>
+        <label style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);font-weight:500;display:block;margin-bottom:6px">Category</label>
+        <select id="mr-category" style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:16px;background:white;color:var(--text);-webkit-appearance:none;appearance:none">
+          <option value="breakfast">Breakfast</option>
+          <option value="breads">Breads &amp; Baked</option>
+          <option value="meals">Easy Meals</option>
+          <option value="soups">Soups &amp; Stews</option>
+          <option value="salads">Salads &amp; Sides</option>
+          <option value="snacks">Snacks</option>
+          <option value="condiments">Condiments</option>
+          <option value="ferments">Ferments</option>
+          <option value="desserts">Desserts</option>
+          <option value="drinks">Drinks</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);font-weight:500;display:block;margin-bottom:6px">Short Description</label>
+        <input id="mr-desc" type="text" placeholder="A quick note about this recipe" style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:16px;background:white;box-sizing:border-box;color:var(--text)">
+      </div>
+      <div>
+        <label style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);font-weight:500;display:block;margin-bottom:6px">Prep Time</label>
+        <input id="mr-prep" type="text" placeholder="e.g. 15 min" style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:16px;background:white;box-sizing:border-box;color:var(--text)">
+      </div>
+      <div>
+        <label style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);font-weight:500;display:block;margin-bottom:6px">Ingredients</label>
+        <textarea id="mr-ingredients" placeholder="One ingredient per line&#10;e.g.&#10;2 cups einkorn flour&#10;1 tsp salt&#10;1 cup water" style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:16px;background:white;box-sizing:border-box;color:var(--text);min-height:140px;resize:vertical;line-height:1.6;-webkit-user-select:text;user-select:text"></textarea>
+      </div>
+      <div>
+        <label style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);font-weight:500;display:block;margin-bottom:6px">Instructions</label>
+        <textarea id="mr-steps" placeholder="One step per line&#10;e.g.&#10;Mix flour and salt together.&#10;Add water and knead until smooth.&#10;Rest 30 minutes." style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:16px;background:white;box-sizing:border-box;color:var(--text);min-height:160px;resize:vertical;line-height:1.6;-webkit-user-select:text;user-select:text"></textarea>
+      </div>
+      <div>
+        <label style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);font-weight:500;display:block;margin-bottom:6px">Notes</label>
+        <textarea id="mr-notes" placeholder="Tips, swaps, or storage info" style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:16px;background:white;box-sizing:border-box;color:var(--text);min-height:80px;resize:vertical;line-height:1.6;-webkit-user-select:text;user-select:text"></textarea>
+      </div>
+      <button data-action="saveMyRecipe" style="width:100%;padding:14px;background:var(--green);color:white;border:none;border-radius:10px;font-family:inherit;font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent">Save Recipe</button>
+    </div>
+  </div>
+</div>
+
+<div id="plan-picker-modal" style="display:none;position:fixed;left:0;right:0;bottom:0;top:0;z-index:200;background:var(--offwhite)">
+  <div id="pp-header" style="position:fixed;left:0;right:0;top:0;z-index:201;background:var(--offwhite);padding-top:env(safe-area-inset-top,0px);border-bottom:1px solid var(--border)">
+    <div class="pane-header" style="margin:0">
+      <button class="back-btn" data-action="closePlanPicker">&#8592;</button>
+      <span class="pane-header-title">Meal Plans</span>
+    </div>
+  </div>
+  <div style="overflow-y:auto;-webkit-overflow-scrolling:touch;height:100%;padding-top:calc(env(safe-area-inset-top,0px) + 56px)">
+    <div style="padding:16px 16px 80px;display:flex;flex-direction:column;gap:10px" id="plan-picker-list"></div>
+  </div>
+</div>
+
+  <div id="print-recipe-frame"></div>
+    <div id="seasonal-banner" data-action="dismissBanner">
+      🌺 May is here — strawberries, cherries, fava beans and more are in season. Check out the seasonal guide in the Learn tab and the May section in the Recipes.
+      <span class="banner-close">Tap to dismiss</span>
+    </div>
+</main>
+<script src="./app.js" defer></script>
+</body>
+</html>
